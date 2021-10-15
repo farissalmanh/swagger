@@ -4,9 +4,9 @@ info:
   description: API for alta final Project
   version: 1.0.0
   contact:
-    email: hanifbg48@gmail.com
+    email: farissalmanh@gmail.com
 servers:
-  - url: 'https://hanifbg.com'
+  - url: 'https://faris.com'
 
 paths:
   /register:
