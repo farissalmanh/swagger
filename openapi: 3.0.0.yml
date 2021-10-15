@@ -1,0 +1,355 @@
+openapi: 3.0.0
+info:
+  title: Alta Final Project API
+  description: API for alta final Project
+  version: 1.0.0
+  contact:
+    email: hanifbg48@gmail.com
+servers:
+  - url: 'https://hanifbg.com'
+
+paths:
+  /register:
+    post:
+      tags:
+      - register
+      summary: Registration For User
+      requestBody:
+        description: Registration For User
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/UserInfo'
+            example:
+              email: main@maiil.com
+              name: this is name
+              phone_number: 08123456789
+              address: Jl Maju Mundur Jakarta
+              password: password
+      responses:
+        '200':
+          description: Register Succeeded
+
+  /get_category:
+    get:
+      tags:
+      - get
+      summary: Get All Category
+      requestBody:
+        description: Get All Category
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/CategoryInfo'
+            example:
+              id_category: 1
+              category_name: this is category name
+      responses:
+        '200':
+          description: Get Success
+
+  /get_all_product/{id_category}:
+    get:
+      tags:
+      - get
+      summary: Get all Product by Category
+      requestBody:
+        description: Get Product by Category
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/ProductInfo'
+            example:
+              id_category: 1
+              product_name: this is product name
+              price: this is product price
+              stock: this is product stock
+              image: this is product image
+              detail: this is product detail
+      responses:
+        '200':
+          description: Get Success
+
+  /get_detail_product/{id_product}:
+    get:
+      tags:
+      - get
+      summary: Get Detail Product
+      requestBody:
+        description: Get Detail Product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/ProductInfo'
+            example:
+              id_category: 1
+              product_name: this is product name
+              price: this is product price
+              stock: this is product stock
+              image: this is product image
+              detail: this is product detail
+      responses:
+        '200':
+          description: Get Success
+
+  /login:
+    post:
+      tags:
+      - login
+      summary: Login users or admin
+      requestBody:
+        description: Optional description in *markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/LoginInfo'
+            example:
+              email: main@maiil.com
+              password: password   
+      responses:
+        '200':
+          description: Login Token
+          content:
+            application/jwt:
+              schema:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+  /add_category:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+      - add
+      summary: Add Category  
+      requestBody:
+        description: Optional description in *markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/CategoryInfo'
+            example:
+              category_name: buah segar
+      responses:
+        '200':
+          description: Add Product Succeeded
+  /add_product:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+      - add
+      summary: Add Product
+      requestBody:
+        description: Optional description in *markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/ProductInfo'
+            example:
+              id_category: 1
+              product_name: pepaya
+              price: 10000
+              stock: 10
+              image: images/pepaya.png
+              detail: pepaya segar
+      responses:
+        '200':
+          description: Add Product Succeeded
+  /add_cart:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+      - add
+      summary: Add Cart
+      requestBody:
+        description: Optional description in *markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/ProductInfo'
+            example:
+              id_product: 1
+              count: 3
+              price: 30000
+      responses:
+        '200':
+          description: Add Cart Succeeded
+
+  '/edit_product/{id_product}':
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+      - edit
+      summary: Edit Product by Product Id
+      requestBody:
+        description: Optional description in *markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/ProductInfo'
+            example:
+              id_category: 1
+              product_name: pepaya
+              price: 10000
+              stock: 10
+              image: images/pepaya.png
+              detail: pepaya segar
+      responses:
+        '200':
+          description: Edit Product Succeeded
+
+  '/delete_cart/{id_cart}/{id_product}':
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+      - delete
+      summary: Delete cart by id cart and id product
+      requestBody:
+        description: Optional description in *markdown*
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/ProductInfo'
+            example:
+              id_cart: 1
+              id_product: 1
+      responses:
+        '200':
+          description: Delete Cart Succeeded
+  
+  
+
+components:
+  requestBodies:
+    LoginInfo:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/LoginInfo" 
+      description: User object that need to Login
+      required: true
+    UserInfo:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UserInfo"
+    CategoryInfo:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CategoryInfo"
+    ProductInfo:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ProductInfo"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:    
+    UnauthorizedError:
+      description: Access Token is Missing or Invalid
+
+  schemas:
+    LoginInfo:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+          minLength: 6
+    UserInfo:
+      type: object
+      required:
+        - email
+        - name
+        - phone_number
+        - password
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        phone_number:
+          type: string
+          minLength: 14
+          maxLength: 16
+        address:
+          type: string
+          maxLength: 100
+        password:
+          type: string
+          minLength: 6
+    CategoryInfo:
+      type: object
+      required:
+        - category_name
+      properties:
+        category_name:
+          type: string
+    ProductInfo:
+      type: object
+      required:
+        - id_category
+        - product_name
+        - price
+        - stock
+        - image
+        - detail
+      properties:
+        id_category:
+          type: integer
+        product_name:
+          type: string
+        price:
+          type: integer
+        stock:
+          type: integer
+        image:
+          type: string
+        detail:
+          type: string
+    CartInfo:
+      type: object
+      required:
+        - id_user
+        - total_price
+      properties:
+        id_user:
+          type: integer
+        total_price:
+          type: integer
+    CartProductInfo:
+      type: object
+      required:
+        - cart_product_id
+        - id_cart
+        - id_product
+        - count
+        - price
+      properties:
+        cart_product_id:
+          type: integer
+        id_cart:
+          type: integer
+        id_product:
+          type: integer
+        count:
+          type: integer
+        price:
+          type: integer
